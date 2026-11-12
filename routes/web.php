@@ -16,10 +16,15 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Produtos
 Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
-Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produtos.create');
-Route::post('/produtos', [ProdutoController::class, 'store'])->name('produtos.store');
+
+Route::middleware(['auth', 'vendedor'])->group(function () {
+    Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produtos.create');
+    Route::post('/produtos', [ProdutoController::class, 'store'])->name('produtos.store');
+});
 
 // Compras
-Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
-Route::get('/compras/create', [CompraController::class, 'create'])->name('compras.create');
-Route::post('/compras', [CompraController::class, 'store'])->name('compras.store');
+Route::middleware('auth')->group(function () {
+    Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
+    Route::get('/compras/create', [CompraController::class, 'create'])->name('compras.create');
+    Route::post('/compras', [CompraController::class, 'store'])->name('compras.store');
+});
